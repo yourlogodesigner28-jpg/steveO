@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celebrity Membership Card</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #160606;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 110vh;
+        }
+
+        #membership-form {
+            background-color: #160606;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        #profile-section {
+            margin-bottom: 20px;
+        }
+
+        #profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            margin: 0;
+            font-weight: 700;
+            color: #FFD700;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        #image-upload {
+            margin-bottom: 16px;
+        }
+
+        button {
+            background-color: #FFD700;
+            color: #000;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #DAA520;
+        }
+
+        #qr-code {
+            display: none;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="membership-form">
+        <div id="profile-section">
+            <img id="profile-image" src="./assets/celeb-profile.jpg" alt="Celebrity Profile Image">
+            <h2>SteveO</h2>
+            <h3>Membership Card Form</h3>
+        </div>
+        
+        <form id="myForm">
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" required>
+
+            <label for="phone">Phone:</label>
+            <input type="tel" id="phone" name="phone" required>
+
+            <label for="image-upload">Upload Image:</label>
+            <input type="file" id="image-upload" name="image" accept="image/*">
+
+            <button type="button" onclick="generateQRCode()">Generate QR Code</button>
+
+            <div id="qr-code">
+                <img id="qr-image" alt="QR Code">
+                <br>
+                <a id="download-link" download="membership_qr.png" href="#">Download QR Code</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function generateQRCode() {
+            var form = document.getElementById("myForm");
+            var qrCodeDiv = document.getElementById("qr-code");
+            var qrImage = document.getElementById("qr-image");
+            var downloadLink = document.getElementById("download-link");
+
+            // Validate form before generating QR code
+            if (form.checkValidity()) {
+                // Get form data
+                var formData = new FormData(form);
+                var qrText = JSON.stringify(Object.fromEntries(formData.entries()));
+
+                // Generate QR code
+                qrImage.src = new QRious({
+                    value: qrText,
+                    size: 128
+                }).toDataURL();
+
+                // Display QR code and download link
+                qrCodeDiv.style.display = "block";
+                downloadLink.href = qrImage.src;
+            } else {
+                // Trigger form validation
+                form.reportValidity();
+            }
+        }
+    </script>
+</body>
+</html>
